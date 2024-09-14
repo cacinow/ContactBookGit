@@ -14,6 +14,8 @@ public class Main {
     public static final String SET_EMAIL      = "SE";
     public static final String LIST_CONTACTS  = "LC";
     public static final String QUIT           = "Q";
+    public static final String GIVEN_NUMBER   = "GN";
+    public static final String EQUAL_PHONE    = "EP";
 
     //Constantes que definem as mensagens para o utilizador
     public static final String CONTACT_EXISTS = "contactBook.Contact already exists.";
@@ -24,6 +26,9 @@ public class Main {
     public static final String BOOK_EMPTY = "contactBook.Contact book empty.";
     public static final String QUIT_MSG = "Goodbye!";
     public static final String COMMAND_ERROR = "Unknown command.";
+    public static final String NONEXISTENT_NUMBER = "Phone number does not exist.";
+    public static final String SHARED_PHONE_NUMBERS = "There are contacts that share phone numbers.";
+    public static final String ALL_DIFFERENT = "All contacts have different phone numbers.";
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -52,6 +57,12 @@ public class Main {
                     break;
                 case LIST_CONTACTS:
                     listAllContacts(cBook);
+                    break;
+                case GIVEN_NUMBER:
+                    contactGivenNumber(in, cBook);
+                    break;
+                case EQUAL_PHONE:
+                    checkEqualContacts(cBook);
                     break;
                 default:
                     System.out.println(COMMAND_ERROR);
@@ -146,5 +157,21 @@ public class Main {
             }
         }
         else System.out.println(BOOK_EMPTY);
+    }
+
+    private static void contactGivenNumber(Scanner in, ContactBook cBook) {
+        int number = in.nextInt();in.nextLine();
+        Contact contact = cBook.getContactByPhone(number);
+        if ( contact == null)
+            System.out.println(NONEXISTENT_NUMBER);
+        else
+            System.out.printf("%s\n", contact.getName());
+    }
+
+    private static void checkEqualContacts(ContactBook cBook) {
+        if(cBook.hasRepeatedPhone())
+            System.out.println(SHARED_PHONE_NUMBERS);
+        else
+            System.out.println(ALL_DIFFERENT);
     }
 }
